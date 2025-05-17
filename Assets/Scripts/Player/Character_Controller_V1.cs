@@ -14,26 +14,28 @@ public class Character_Controller_V1 : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private float horizontalInput;
+    private PlayerInputManager inputManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        inputManager = GetComponent<PlayerInputManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Get horizontal input
-        horizontalInput = Input.GetAxisRaw("Horizontal");
+        // Input manager'dan gelen değerleri kullan
+        horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
 
-        // Jump input
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        // Zıplama kontrolü
+        if (Input.GetButtonDown(inputManager.jumpButton) && isGrounded)
         {
             Jump();
         }
 
-        // Check if grounded
+        // Yer kontrolü
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 

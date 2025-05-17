@@ -15,11 +15,13 @@ public class Shooting1 : MonoBehaviour
     private float nextFireTime = 0f;
     private Character_Controller_V1 characterController;
     private Vector2 lastDirection = Vector2.right; // Default to right at start
+    private PlayerInputManager inputManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         characterController = GetComponent<Character_Controller_V1>();
+        inputManager = GetComponent<PlayerInputManager>();
     }
 
     // Update is called once per frame
@@ -29,7 +31,7 @@ public class Shooting1 : MonoBehaviour
         UpdateLastDirection();
 
         // Check for shooting input
-        if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
+        if (Input.GetButton(inputManager.fireButton) && Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
@@ -38,8 +40,8 @@ public class Shooting1 : MonoBehaviour
 
     void UpdateLastDirection()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        float horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
+        float verticalInput = Input.GetAxisRaw(inputManager.verticalAxis);
 
         if (horizontalInput != 0 || verticalInput != 0)
         {
@@ -71,8 +73,8 @@ public class Shooting1 : MonoBehaviour
 
     Vector2 GetShootDirection()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        float horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
+        float verticalInput = Input.GetAxisRaw(inputManager.verticalAxis);
 
         // If there's any input, use it to determine direction
         if (horizontalInput != 0 || verticalInput != 0)
