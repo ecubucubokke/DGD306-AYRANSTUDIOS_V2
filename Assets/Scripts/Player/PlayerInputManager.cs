@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System;
 
 public class PlayerInputManager : MonoBehaviour
 {
@@ -9,30 +11,73 @@ public class PlayerInputManager : MonoBehaviour
     }
 
     public PlayerNumber playerNumber;
+    private PlayerInput playerInput;
+    private Vector2 moveInput;
+    private bool jumpPressed;
+    private bool firePressed;
 
-    [Header("Input Settings")]
-    public string horizontalAxis;
-    public string verticalAxis;
-    public string jumpButton;
-    public string fireButton;
+    // Events
+    public event Action<Vector2> OnMove;
+    public event Action OnJump;
+    public event Action OnFire;
 
     private void Awake()
     {
-        // Oyuncu numarasına göre input ayarlarını yap
-        if (playerNumber == PlayerNumber.Player1)
+        playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null)
         {
-            horizontalAxis = "Horizontal";
-            verticalAxis = "Vertical";
-            jumpButton = "Jump";
-            fireButton = "Fire1";
+            Debug.LogError("PlayerInput component is missing!");
+            return;
         }
-        else
+    }
+
+    // Input System Events
+    public void OnMoveInput(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+        OnMove?.Invoke(moveInput);
+    }
+
+    public void OnJumpInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            horizontalAxis = "Horizontal2";
-            verticalAxis = "Vertical2";
-            jumpButton = "Jump2";
-            fireButton = "Fire2";
+            jumpPressed = true;
+            OnJump?.Invoke();
         }
+        else if (context.canceled)
+        {
+            jumpPressed = false;
+        }
+    }
+
+    public void OnFireInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            firePressed = true;
+            OnFire?.Invoke();
+        }
+        else if (context.canceled)
+        {
+            firePressed = false;
+        }
+    }
+
+    // Getter methods for other scripts
+    public Vector2 GetMoveInput()
+    {
+        return moveInput;
+    }
+
+    public bool IsJumpPressed()
+    {
+        return jumpPressed;
+    }
+
+    public bool IsFirePressed()
+    {
+        return firePressed;
     }
 
     private void Start()

@@ -13,7 +13,7 @@ public class Character_Controller_V1 : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isGrounded;
-    private float horizontalInput;
+    private Vector2 moveInput;
     private PlayerInputManager inputManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,21 +21,39 @@ public class Character_Controller_V1 : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         inputManager = GetComponent<PlayerInputManager>();
+        
+        // Subscribe to events
+        inputManager.OnMove += HandleMove;
+        inputManager.OnJump += HandleJump;
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (inputManager != null)
+        {
+            inputManager.OnMove -= HandleMove;
+            inputManager.OnJump -= HandleJump;
+        }
+    }
+
+    void HandleMove(Vector2 input)
+    {
+        moveInput = input;
+    }
+
+    void HandleJump()
+    {
+        if (isGrounded)
+        {
+            Jump();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Input manager'dan gelen değerleri kullan
-        horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
-
-        // Zıplama kontrolü
-        if (Input.GetButtonDown(inputManager.jumpButton) && isGrounded)
-        {
-            Jump();
-        }
-
-        // Yer kontrolü
+        // Ground check
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
@@ -47,7 +65,7 @@ public class Character_Controller_V1 : MonoBehaviour
 
     void Move()
     {
-        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
     }
 
     void Jump()

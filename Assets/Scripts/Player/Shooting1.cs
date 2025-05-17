@@ -14,54 +14,69 @@ public class Shooting1 : MonoBehaviour
 
     private float nextFireTime = 0f;
     private Character_Controller_V1 characterController;
-    private Vector2 lastDirection = Vector2.right; // Default to right at start
+    private Vector2 lastDirection = Vector2.right;
     private PlayerInputManager inputManager;
+    private Vector2 moveInput;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         characterController = GetComponent<Character_Controller_V1>();
         inputManager = GetComponent<PlayerInputManager>();
+        
+        // Subscribe to events
+        inputManager.OnMove += HandleMove;
+        inputManager.OnFire += HandleFire;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDestroy()
     {
-        // Update last direction based on input
-        UpdateLastDirection();
+        // Unsubscribe from events
+        if (inputManager != null)
+        {
+            inputManager.OnMove -= HandleMove;
+            inputManager.OnFire -= HandleFire;
+        }
+    }
 
-        // Check for shooting input
-        if (Input.GetButton(inputManager.fireButton) && Time.time >= nextFireTime)
+    void HandleMove(Vector2 input)
+    {
+        moveInput = input;
+        if (input != Vector2.zero)
+        {
+            lastDirection = input.normalized;
+        }
+    }
+
+    void HandleFire()
+    {
+        if (Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
         }
     }
 
-    void UpdateLastDirection()
+    void Update()
     {
-        float horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
-        float verticalInput = Input.GetAxisRaw(inputManager.verticalAxis);
-
-        if (horizontalInput != 0 || verticalInput != 0)
+        // Sürekli ateş etme kontrolü
+        if (inputManager.IsFirePressed() && Time.time >= nextFireTime)
         {
-            lastDirection = new Vector2(horizontalInput, verticalInput).normalized;
+            Shoot();
+            nextFireTime = Time.time + fireRate;
         }
     }
 
     void Shoot()
     {
-        // Get the direction based on input
         Vector2 shootDirection = GetShootDirection();
         
-        // Spawn shoot effect
         if (shootEffectPrefab != null)
         {
             GameObject shootEffect = Instantiate(shootEffectPrefab, firePoint.position, Quaternion.identity);
             Destroy(shootEffect, shootEffectDuration);
         }
 
-        // Instantiate bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         bullet bulletScript = bullet.GetComponent<bullet>();
         
@@ -73,15 +88,10 @@ public class Shooting1 : MonoBehaviour
 
     Vector2 GetShootDirection()
     {
-        float horizontalInput = Input.GetAxisRaw(inputManager.horizontalAxis);
-        float verticalInput = Input.GetAxisRaw(inputManager.verticalAxis);
-
-        // If there's any input, use it to determine direction
-        if (horizontalInput != 0 || verticalInput != 0)
+        if (moveInput != Vector2.zero)
         {
-            return new Vector2(horizontalInput, verticalInput).normalized;
+            return moveInput.normalized;
         }
-        // If no input, use the last direction
         return lastDirection;
     }
 }
