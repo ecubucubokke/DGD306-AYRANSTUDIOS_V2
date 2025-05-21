@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Character_Controller_V1 : MonoBehaviour
 {
@@ -11,6 +13,12 @@ public class Character_Controller_V1 : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
 
+    [Header("Health Settings")]
+    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int currentHealth;
+    [SerializeField] private Slider healthSlider;
+    [SerializeField] private TextMeshProUGUI healthText;
+
     private Rigidbody2D rb;
     private bool isGrounded;
     private Vector2 moveInput;
@@ -21,6 +29,10 @@ public class Character_Controller_V1 : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         inputManager = GetComponent<PlayerInputManager>();
+        
+        // Initialize health
+        currentHealth = maxHealth;
+        UpdateHealthUI();
         
         // Subscribe to events
         inputManager.OnMove += HandleMove;
@@ -71,6 +83,41 @@ public class Character_Controller_V1 : MonoBehaviour
     void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth = Mathf.Max(0, currentHealth - damage);
+        UpdateHealthUI();
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        // Handle player death
+        Debug.Log("Player died!");
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
+        }
+
+        if (healthText != null)
+        {
+            healthText.text = $"{currentHealth}/{maxHealth}";
+        }
     }
 
     // Optional: Visualize ground check in editor

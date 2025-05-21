@@ -11,10 +11,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float followRange = 5f; // Oyuncuyu takip etme mesafesi
     private Transform player;
 
+    [Header("Shooting Settings")]
+    [SerializeField] private bool canShoot = true;
+    [SerializeField] private float shootRange = 7f;
+    [SerializeField] private float fireRate = 1f;
+    [SerializeField] private GameObject enemyBulletPrefab;
+    [SerializeField] private Transform firePoint;
+    private float nextFireTime = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (followPlayer)
+        if (followPlayer || canShoot)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
@@ -25,13 +33,36 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (followPlayer && player != null)
+        if (player == null) return;
+
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
+        // Follow player if in range
+        if (followPlayer && distanceToPlayer <= followRange)
         {
-            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-            if (distanceToPlayer <= followRange)
+            Vector2 direction = (player.position - transform.position).normalized;
+            transform.Translate(direction * moveSpeed * Time.deltaTime);
+        }
+
+        // Shoot at player if in range
+        if (canShoot && distanceToPlayer <= shootRange && Time.time >= nextFireTime)
+        {
+            Shoot();
+            nextFireTime = Time.time + fireRate;
+        }
+    }
+
+    void Shoot()
+    {
+        if (enemyBulletPrefab != null && firePoint != null)
+        {
+            Vector2 direction = (player.position - transform.position).normalized;
+            GameObject bullet = Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
+            Enemy_Bullet bulletScript = bullet.GetComponent<Enemy_Bullet>();
+            
+            if (bulletScript != null)
             {
-                Vector2 direction = (player.position - transform.position).normalized;
-                transform.Translate(direction * moveSpeed * Time.deltaTime);
+                bulletScript.SetDirection(direction);
             }
         }
     }
