@@ -18,9 +18,12 @@ public class GameManager : MonoBehaviour
     
     [Header("Game Over Settings")]
     [SerializeField] private float gameOverDelay = 3f;
-    [SerializeField] private GameObject gameOverPanelPrefab; // Changed to prefab
+    [SerializeField] private GameObject gameOverPanelPrefab;
     private GameObject gameOverPanel;
     private Canvas mainCanvas;
+    
+    private bool player1Dead = false;
+    private bool player2Dead = false;
     
     private void Awake()
     {
@@ -50,7 +53,14 @@ public class GameManager : MonoBehaviour
         if (scene.name != "Menu")
         {
             SetupGameOverPanel();
+            ResetGameState();
         }
+    }
+
+    private void ResetGameState()
+    {
+        player1Dead = false;
+        player2Dead = false;
     }
 
     private void SetupGameOverPanel()
@@ -81,19 +91,44 @@ public class GameManager : MonoBehaviour
     
     public void StartGame()
     {
-        Time.timeScale = 1f; // Reset time scale
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Level1");
     }
     
     public void ReturnToMenu()
     {
-        Time.timeScale = 1f; // Reset time scale
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
 
-    public void GameOver()
+    public void PlayerDied(PlayerInputManager.PlayerNumber playerNumber)
     {
-        Time.timeScale = 0f; // Pause the game
+        if (currentGameMode == GameMode.SinglePlayer)
+        {
+            GameOver();
+            return;
+        }
+
+        // Two player mode
+        if (playerNumber == PlayerInputManager.PlayerNumber.Player1)
+        {
+            player1Dead = true;
+        }
+        else
+        {
+            player2Dead = true;
+        }
+
+        // If either player is dead in two player mode, it's game over
+        if (player1Dead || player2Dead)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        Time.timeScale = 0f;
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);

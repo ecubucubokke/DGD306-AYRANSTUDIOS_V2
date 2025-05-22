@@ -9,7 +9,8 @@ public class Enemy : MonoBehaviour
     [Header("Player Tracking")]
     [SerializeField] private bool followPlayer = true;
     [SerializeField] private float followRange = 5f; // Oyuncuyu takip etme mesafesi
-    private Transform player;
+    private Transform[] players = new Transform[2];
+    private Transform currentTarget;
 
     [Header("Shooting Settings")]
     [SerializeField] private bool canShoot = true;
@@ -24,39 +25,69 @@ public class Enemy : MonoBehaviour
     {
         if (followPlayer || canShoot)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
-                player = playerObj.transform;
+            // Find both players
+            GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+            for (int i = 0; i < playerObjects.Length && i < 2; i++)
+            {
+                players[i] = playerObjects[i].transform;
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player == null) return;
+        if (players[0] == null && players[1] == null) return;
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        // Find closest player
+        currentTarget = FindClosestPlayer();
 
-        // Follow player if in range
-        if (followPlayer && distanceToPlayer <= followRange)
+        if (currentTarget != null)
         {
-            Vector2 direction = (player.position - transform.position).normalized;
-            transform.Translate(direction * moveSpeed * Time.deltaTime);
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
+
+            // Follow player if in range
+            if (followPlayer && distanceToTarget <= followRange)
+            {
+                Vector2 direction = (currentTarget.position - transform.position).normalized;
+                transform.Translate(direction * moveSpeed * Time.deltaTime);
+            }
+
+            // Shoot at player if in range
+            if (canShoot && distanceToTarget <= shootRange && Time.time >= nextFireTime)
+            {
+                Shoot();
+                nextFireTime = Time.time + fireRate;
+            }
+        }
+    }
+
+    private Transform FindClosestPlayer()
+    {
+        Transform closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Transform player in players)
+        {
+            if (player != null)
+            {
+                float distance = Vector2.Distance(transform.position, player.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = player;
+                }
+            }
         }
 
-        // Shoot at player if in range
-        if (canShoot && distanceToPlayer <= shootRange && Time.time >= nextFireTime)
-        {
-            Shoot();
-            nextFireTime = Time.time + fireRate;
-        }
+        return closest;
     }
 
     void Shoot()
     {
-        if (enemyBulletPrefab != null && firePoint != null)
+        if (enemyBulletPrefab != null && firePoint != null && currentTarget != null)
         {
-            Vector2 direction = (player.position - transform.position).normalized;
+            Vector2 direction = (currentTarget.position - transform.position).normalized;
             GameObject bullet = Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
             Enemy_Bullet bulletScript = bullet.GetComponent<Enemy_Bullet>();
             

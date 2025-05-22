@@ -18,6 +18,7 @@ public class Character_Controller_V1 : MonoBehaviour
     [SerializeField] private int currentHealth;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private PlayerInputManager.PlayerNumber playerNumber;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -29,10 +30,20 @@ public class Character_Controller_V1 : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         inputManager = GetComponent<PlayerInputManager>();
+        playerNumber = inputManager.playerNumber;
         
         // Initialize health
         currentHealth = maxHealth;
         UpdateHealthUI();
+        
+        // Hide Player 2's health UI in single player mode
+        if (GameManager.Instance != null && 
+            GameManager.Instance.currentGameMode == GameManager.GameMode.SinglePlayer && 
+            playerNumber == PlayerInputManager.PlayerNumber.Player2)
+        {
+            if (healthSlider != null) healthSlider.gameObject.SetActive(false);
+            if (healthText != null) healthText.gameObject.SetActive(false);
+        }
         
         // Subscribe to events
         inputManager.OnMove += HandleMove;
@@ -87,7 +98,9 @@ public class Character_Controller_V1 : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log($"Player {playerNumber} taking {damage} damage. Current health: {currentHealth}");
         currentHealth = Mathf.Max(0, currentHealth - damage);
+        Debug.Log($"Player {playerNumber} health after damage: {currentHealth}");
         UpdateHealthUI();
 
         if (currentHealth <= 0)
@@ -98,11 +111,10 @@ public class Character_Controller_V1 : MonoBehaviour
 
     private void Die()
     {
-        // Handle player death
-        Debug.Log("Player died!");
+        Debug.Log($"Player {playerNumber} died!");
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.GameOver();
+            GameManager.Instance.PlayerDied(playerNumber);
         }
     }
 
@@ -116,7 +128,7 @@ public class Character_Controller_V1 : MonoBehaviour
 
         if (healthText != null)
         {
-            healthText.text = $"{currentHealth}/{maxHealth}";
+            healthText.text = $"P{(int)playerNumber + 1}: {currentHealth}/{maxHealth}";
         }
     }
 
