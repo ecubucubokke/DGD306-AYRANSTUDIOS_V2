@@ -21,14 +21,23 @@ public class Character_Controller_V1 : MonoBehaviour
     [SerializeField] private PlayerInputManager.PlayerNumber playerNumber;
 
     private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
     private bool isGrounded;
     private Vector2 moveInput;
     private PlayerInputManager inputManager;
+
+    // Animation parameter names
+    private readonly string xVelocityParam = "xVelocity";
+    private readonly string yVelocityParam = "yVelocity";
+    private readonly string isJumpingParam = "isJumping";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         inputManager = GetComponent<PlayerInputManager>();
         playerNumber = inputManager.playerNumber;
         
@@ -78,6 +87,24 @@ public class Character_Controller_V1 : MonoBehaviour
     {
         // Ground check
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Update animation parameters
+        UpdateAnimationParameters();
+    }
+
+    void UpdateAnimationParameters()
+    {
+        if (animator != null)
+        {
+            // Set x velocity for horizontal movement
+            animator.SetFloat(xVelocityParam, Mathf.Abs(rb.linearVelocity.x));
+            
+            // Set y velocity for vertical movement
+            animator.SetFloat(yVelocityParam, rb.linearVelocity.y);
+            
+            // Set jumping state
+            animator.SetBool(isJumpingParam, !isGrounded);
+        }
     }
 
     void FixedUpdate()
@@ -89,11 +116,21 @@ public class Character_Controller_V1 : MonoBehaviour
     void Move()
     {
         rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        
+        // Flip sprite based on movement direction
+        if (moveInput.x != 0)
+        {
+            spriteRenderer.flipX = moveInput.x < 0;
+        }
     }
 
     void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (animator != null)
+        {
+            animator.SetBool(isJumpingParam, true);
+        }
     }
 
     public void TakeDamage(int damage)
