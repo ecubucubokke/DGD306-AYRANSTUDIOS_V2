@@ -45,6 +45,16 @@ public class bullet : MonoBehaviour
             // Handle enemy damage
             Destroy(gameObject);
         }
+        else if (other.CompareTag("Boss"))
+        {
+            // Handle boss damage
+            Boss1 boss = other.GetComponent<Boss1>();
+            if (boss != null)
+            {
+                boss.TakeDamage(damage);
+            }
+            Destroy(gameObject);
+        }
         else if (other.CompareTag("Ground") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log("Bullet hit ground!"); // Debug log

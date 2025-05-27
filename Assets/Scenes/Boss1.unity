@@ -6037,6 +6037,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9138460824036489966, guid: fe337a0ceea696a449c1950a657009a8, type: 3}
   m_PrefabInstance: {fileID: 997944234}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &112633805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112633806}
+  m_Layer: 0
+  m_Name: Laser_SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &112633806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112633805}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.46, y: 1.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1300201122}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &113156323 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9138460824036489966, guid: fe337a0ceea696a449c1950a657009a8, type: 3}
@@ -63539,6 +63570,8 @@ GameObject:
   - component: {fileID: 1300201122}
   - component: {fileID: 1300201121}
   - component: {fileID: 1300201120}
+  - component: {fileID: 1300201124}
+  - component: {fileID: 1300201123}
   m_Layer: 0
   m_Name: Boss1
   m_TagString: Untagged
@@ -63611,7 +63644,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 21
   m_Sprite: {fileID: -59276738852975808, guid: a8e81c75e54b89c46b980d8e43d81591, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -63635,9 +63668,77 @@ Transform:
   m_LocalPosition: {x: 5.43, y: 1.7, z: -0.00838015}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 112633806}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1300201123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300201119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a3c6e45788ec74aba879802a149384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  moveRange: 0
+  moveDelay: 4
+  rightEdgeOffset: 3
+  attackCooldown: 5
+  laserDuration: 3
+  laserRotationSpeed: 30
+  laserPrefab: {fileID: 0}
+  laserSpawnPoint: {fileID: 112633806}
+  maxHealth: 500
+  currentHealth: 500
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
+  victoryTextPrefab: {fileID: 0}
+  victoryTextDuration: 3
+  laserSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  audioSource: {fileID: 0}
+--- !u!70 &1300201124
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300201119}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.21}
+  m_Size: {x: 1.96, y: 4.86}
+  m_Direction: 0
 --- !u!4 &1300421730 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9138460824036489966, guid: fe337a0ceea696a449c1950a657009a8, type: 3}
