@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 20
   bulletLifetime: 2
-  damage: 100
+  damage: 1
   hitEffectPrefab: {fileID: 133542748560367321, guid: 01f6e5b3e49b10248af843c10a73a1af, type: 3}
   hitEffectDuration: 0.8
 --- !u!95 &4126516865231043714

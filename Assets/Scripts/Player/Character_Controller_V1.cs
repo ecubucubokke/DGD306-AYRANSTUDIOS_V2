@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class Character_Controller_V1 : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Character_Controller_V1 : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private PlayerInputManager.PlayerNumber playerNumber;
+    [SerializeField] private float invincibilityDuration = 1f;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -26,6 +28,7 @@ public class Character_Controller_V1 : MonoBehaviour
     private bool isGrounded;
     private Vector2 moveInput;
     private PlayerInputManager inputManager;
+    private bool isInvincible = false;
 
     // Animation parameter names
     private readonly string xVelocityParam = "xVelocity";
@@ -135,6 +138,8 @@ public class Character_Controller_V1 : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isInvincible) return;
+
         Debug.Log($"Player {playerNumber} taking {damage} damage. Current health: {currentHealth}");
         currentHealth = Mathf.Max(0, currentHealth - damage);
         Debug.Log($"Player {playerNumber} health after damage: {currentHealth}");
@@ -144,6 +149,31 @@ public class Character_Controller_V1 : MonoBehaviour
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(InvincibilityRoutine());
+        }
+    }
+
+    private IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+        float flashDuration = 0.1f; // Her yanıp sönme süresi
+        float elapsedTime = 0f;
+        bool isVisible = true;
+
+        while (elapsedTime < invincibilityDuration)
+        {
+            // Sprite'ı yanıp söndür
+            spriteRenderer.color = new Color(1f, 1f, 1f, isVisible ? 1f : 0.3f);
+            isVisible = !isVisible;
+            
+            yield return new WaitForSeconds(flashDuration);
+            elapsedTime += flashDuration;
+        }
+        
+        isInvincible = false;
+        spriteRenderer.color = Color.white; // Normal rengine dön
     }
 
     private void Die()

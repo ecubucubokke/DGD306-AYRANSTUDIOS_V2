@@ -5,12 +5,15 @@ public class Enemy : MonoBehaviour
     [Header("Enemy Settings")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private int health = 3;
+    [SerializeField] private int collisionDamage = 10; // Oyuncuya çarpma hasarı
+    [SerializeField] private float collisionCooldown = 1f; // Çarpışma sonrası bekleme süresi
 
     [Header("Player Tracking")]
     [SerializeField] private bool followPlayer = true;
     [SerializeField] private float followRange = 5f; // Oyuncuyu takip etme mesafesi
     private Transform[] players = new Transform[2];
     private Transform currentTarget;
+    private float lastCollisionTime; // Son çarpışma zamanı
 
     [Header("Shooting Settings")]
     [SerializeField] private bool canShoot = true;
@@ -106,6 +109,23 @@ public class Enemy : MonoBehaviour
             if (health <= 0)
             {
                 Destroy(gameObject);
+            }
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Çarpışma cooldown kontrolü
+            if (Time.time >= lastCollisionTime + collisionCooldown)
+            {
+                Character_Controller_V1 player = collision.gameObject.GetComponent<Character_Controller_V1>();
+                if (player != null)
+                {
+                    player.TakeDamage(collisionDamage);
+                    lastCollisionTime = Time.time;
+                }
             }
         }
     }

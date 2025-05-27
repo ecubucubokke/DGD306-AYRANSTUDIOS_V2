@@ -17,6 +17,7 @@ public class Boss1 : MonoBehaviour
     [SerializeField] private float laserRotationSpeed = 30f;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Transform laserSpawnPoint;
+    [SerializeField] private int laserDamage = 20;
 
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 500;
@@ -33,6 +34,9 @@ public class Boss1 : MonoBehaviour
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioSource audioSource;
 
+    [Header("Spawner Reference")]
+    [SerializeField] private EnemySpawner enemySpawner;
+
     private Animator animator;
     private bool isMovingUp = true;
     private bool canAttack = true;
@@ -48,6 +52,11 @@ public class Boss1 : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
         UpdateHealthUI();
+
+        if (enemySpawner == null)
+        {
+            enemySpawner = FindObjectOfType<EnemySpawner>();
+        }
 
         // Calculate screen boundaries
         Camera mainCamera = Camera.main;
@@ -115,6 +124,13 @@ public class Boss1 : MonoBehaviour
         currentLaser = Instantiate(laserPrefab, laserSpawnPoint.position, Quaternion.identity);
         currentLaser.transform.parent = transform;
 
+        // Set laser damage
+        LaserDamage laserDamageComponent = currentLaser.GetComponent<LaserDamage>();
+        if (laserDamageComponent != null)
+        {
+            laserDamageComponent.SetDamage(laserDamage);
+        }
+
         float elapsedTime = 0f;
         while (elapsedTime < laserDuration)
         {
@@ -157,6 +173,12 @@ public class Boss1 : MonoBehaviour
         animator.SetTrigger("Die");
         audioSource.PlayOneShot(deathSound);
         
+        // Notify enemy spawner to stop spawning
+        if (enemySpawner != null)
+        {
+            enemySpawner.StopSpawning();
+        }
+
         // Show victory text
         if (victoryTextPrefab != null)
         {
