@@ -199,6 +199,12 @@ public class Character_Controller_V1 : MonoBehaviour
         }
     }
 
+    public void Heal(int amount)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        UpdateHealthUI();
+    }
+
     // Optional: Visualize ground check in editor
     void OnDrawGizmosSelected()
     {

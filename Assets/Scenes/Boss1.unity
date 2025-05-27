@@ -21005,7 +21005,7 @@ Transform:
   m_GameObject: {fileID: 407453242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.33, y: 0.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41835,7 +41835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 73976734261130393, guid: 510524e877aff6141ac96a65a287374c, type: 3}
-  spawnInterval: 8
+  spawnInterval: 5
   initialDelay: 1
   spawnPoints:
   - {fileID: 407453243}
@@ -45131,7 +45131,7 @@ Transform:
   m_GameObject: {fileID: 880539306}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.73, y: 2.53, z: 0}
+  m_LocalPosition: {x: -5.73, y: 2.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -81086,7 +81086,7 @@ Transform:
   m_GameObject: {fileID: 1627432510}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.02, z: 0}
+  m_LocalPosition: {x: -0.26, y: -1.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -106628,8 +106628,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1648978383}
     - target: {fileID: 2731724006324813517, guid: 6340b1d006d5a194f9f9b9667eef0cc1, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731724006324813517, guid: 6340b1d006d5a194f9f9b9667eef0cc1, type: 3}
       propertyPath: laserDamage
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731724006324813517, guid: 6340b1d006d5a194f9f9b9667eef0cc1, type: 3}
+      propertyPath: enemySpawner
+      value: 
+      objectReference: {fileID: 807348576}
+    - target: {fileID: 2731724006324813517, guid: 6340b1d006d5a194f9f9b9667eef0cc1, type: 3}
+      propertyPath: currentHealth
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2731724006324813517, guid: 6340b1d006d5a194f9f9b9667eef0cc1, type: 3}
       propertyPath: victoryTextPrefab

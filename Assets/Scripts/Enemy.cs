@@ -8,6 +8,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int collisionDamage = 10; // Oyuncuya çarpma hasarı
     [SerializeField] private float collisionCooldown = 1f; // Çarpışma sonrası bekleme süresi
 
+    [Header("Health Drop Settings")]
+    [SerializeField] private GameObject healthCollectablePrefab;
+    [SerializeField] [Range(0f, 1f)] private float healthDropChance = 0.3f; // Can düşme şansı (0-1 arası)
+
     [Header("Player Tracking")]
     [SerializeField] private bool followPlayer = true;
     [SerializeField] private float followRange = 5f; // Oyuncuyu takip etme mesafesi
@@ -108,8 +112,17 @@ public class Enemy : MonoBehaviour
             health--;
             if (health <= 0)
             {
+                TryDropHealth();
                 Destroy(gameObject);
             }
+        }
+    }
+
+    private void TryDropHealth()
+    {
+        if (healthCollectablePrefab != null && Random.value <= healthDropChance)
+        {
+            Instantiate(healthCollectablePrefab, transform.position, Quaternion.identity);
         }
     }
 
