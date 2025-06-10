@@ -27,9 +27,27 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform firePoint;
     private float nextFireTime = 0f;
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator; // Animator controlling idle/walk/shoot
+    private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
+    private static readonly int AnimShoot = Animator.StringToHash("Shoot");
+
+    [Header("Visual")]
+    [SerializeField] private SpriteRenderer spriteRenderer; // For flipping left/right
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>(); // Fallback to children
+        }
+
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
         if (followPlayer || canShoot)
         {
             // Find both players
@@ -53,11 +71,30 @@ public class Enemy : MonoBehaviour
         {
             float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
 
+            bool isMoving = false;
+
             // Follow player if in range
             if (followPlayer && distanceToTarget <= followRange)
             {
                 Vector2 direction = (currentTarget.position - transform.position).normalized;
                 transform.Translate(direction * moveSpeed * Time.deltaTime);
+                isMoving = true;
+            }
+
+            // Update movement animation
+            if (animator != null)
+            {
+                animator.SetBool(AnimIsMoving, isMoving);
+            }
+
+            // Flip sprite towards target (default looks right)
+            if (spriteRenderer != null)
+            {
+                float xDiff = currentTarget.position.x - transform.position.x;
+                if (Mathf.Abs(xDiff) > 0.05f) // Avoid jitter when almost aligned
+                {
+                    spriteRenderer.flipX = xDiff < 0; // face left if target is left
+                }
             }
 
             // Shoot at player if in range
@@ -92,6 +129,11 @@ public class Enemy : MonoBehaviour
 
     void Shoot()
     {
+        if (animator != null)
+        {
+            animator.SetTrigger(AnimShoot);
+        }
+
         if (enemyBulletPrefab != null && firePoint != null && currentTarget != null)
         {
             Vector2 direction = (currentTarget.position - transform.position).normalized;

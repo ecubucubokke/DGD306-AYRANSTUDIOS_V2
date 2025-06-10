@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7349178399951916782}
   - component: {fileID: 6801741416815610872}
   - component: {fileID: 151309620929432863}
-  - component: {fileID: 1371343665341293617}
-  m_Layer: 0
-  m_Name: Enemy (1)
+  - component: {fileID: 8078868083107552670}
+  m_Layer: 12
+  m_Name: Enemy Stationary
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,10 +29,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4832454562298362713}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.731192, y: 0.89293087, z: 0.029226908}
-  m_LocalScale: {x: 1.07, y: 1.07, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 18.3762, y: -4.240208, z: 0.058453817}
+  m_LocalScale: {x: 0.77, y: 0.77, z: 0.7196261}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1911551284041187799}
   m_Father: {fileID: 0}
@@ -105,7 +105,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -146,7 +146,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4832454562298362713}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -178,21 +178,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  health: 5
+  health: 3
   collisionDamage: 10
   collisionCooldown: 1
-  healthCollectablePrefab: {fileID: 0}
+  healthCollectablePrefab: {fileID: 6006678821558556613, guid: 3c842d32321499a478888867b8435cfd, type: 3}
   healthDropChance: 0.3
-  followPlayer: 1
+  followPlayer: 0
   followRange: 5
   canShoot: 1
-  shootRange: 7
-  fireRate: 1
+  shootRange: 200
+  fireRate: 4
   enemyBulletPrefab: {fileID: 1562547607110310153, guid: b7dd51d52a594f54296329a75eb62a19, type: 3}
   firePoint: {fileID: 1911551284041187799}
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
---- !u!95 &1371343665341293617
+--- !u!95 &8078868083107552670
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -223,7 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1911551284041187799}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Fire_Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

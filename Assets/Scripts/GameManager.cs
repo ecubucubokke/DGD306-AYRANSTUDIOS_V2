@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private bool player1Dead = false;
     private bool player2Dead = false;
     
+    private bool isTransitioning = false; // Prevents double-loading a scene
+
     private void Awake()
     {
         if (Instance == null)
@@ -152,5 +154,25 @@ public class GameManager : MonoBehaviour
         Debug.Log("StartGame çağrıldı: " + mode);
         GameManager.Instance.SetGameMode(mode);
         GameManager.Instance.StartGame();
+    }
+
+    /// <summary>
+    /// Loads a scene by name through the GameManager. Useful for portal objects that want to trigger scene changes.
+    /// </summary>
+    /// <param name="sceneName">Name of the scene to load.</param>
+    public void TransitionToScene(string sceneName)
+    {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        StartCoroutine(LoadSceneRoutine(sceneName));
+    }
+
+    private IEnumerator LoadSceneRoutine(string sceneName)
+    {
+        Time.timeScale = 1f; // Ensure game is not paused
+        // Optional: small delay here to allow for fade-out animations, SFX, etc.
+        yield return null;
+        SceneManager.LoadScene(sceneName);
+        isTransitioning = false;
     }
 } 
