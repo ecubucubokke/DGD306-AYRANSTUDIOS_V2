@@ -45,14 +45,21 @@ public class bullet : MonoBehaviour
             // Handle enemy damage
             Destroy(gameObject);
         }
-        else if (other.CompareTag("Boss"))
+        else if (other.CompareTag("Boss") || other.CompareTag("Boss2"))
         {
-            // Handle boss damage
-            Boss1 boss = other.GetComponent<Boss1>();
-            if (boss != null)
+            // Handle boss damage for Boss1 or Boss2
+            Boss1 boss1 = other.GetComponent<Boss1>();
+            if (boss1 != null)
             {
-                boss.TakeDamage(damage);
+                boss1.TakeDamage(damage);
             }
+
+            Boss2 boss2 = other.GetComponent<Boss2>();
+            if (boss2 != null)
+            {
+                boss2.TakeDamage(damage);
+            }
+
             Destroy(gameObject);
         }
         else if (other.CompareTag("Ground") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))

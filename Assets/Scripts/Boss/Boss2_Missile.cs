@@ -10,6 +10,7 @@ public class Boss2_Missile : MonoBehaviour
 
     private Transform target;
     private int damage;
+    private Rigidbody2D rb;
 
     public void Initialize(Transform targetTransform, int damageAmount)
     {
@@ -17,20 +18,32 @@ public class Boss2_Missile : MonoBehaviour
         damage = damageAmount;
     }
 
-    private void Update()
+    private void Awake()
     {
-        if (target == null)
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError($"{name}: Rigidbody2D component missing!");
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (target == null || rb == null)
         {
             Destroy(gameObject);
             return;
         }
 
-        // Homing movement
-        Vector2 direction = (Vector2)target.position - (Vector2)transform.position;
-        direction.Normalize();
-        float rotateAmount = Vector3.Cross(direction, transform.right).z;
-        GetComponent<Rigidbody2D>().angularVelocity = -rotateAmount * rotateSpeed;
-        GetComponent<Rigidbody2D>().linearVelocity = transform.right * speed;
+        // Calculate direction towards target
+        Vector2 direction = ((Vector2)target.position - rb.position).normalized;
+
+        // Determine rotation amount; use transform.up as missile forward axis
+        float rotateAmount = Vector3.Cross(direction, transform.up).z;
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
+
+        // Propel missile forward constantly
+        rb.linearVelocity = transform.up * speed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -43,7 +56,19 @@ public class Boss2_Missile : MonoBehaviour
         // Visual effect
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            GameObject effect = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+            // Eğer ParticleSystem içeriyorsa, süresi kadar bekleyip yok et
+            ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                Destroy(effect, ps.main.duration + ps.main.startLifetime.constantMax);
+            }
+            else
+            {
+                // Aksi halde varsayılan bir süre sonra yok et
+                Destroy(effect, 0.5f);
+            }
         }
 
         // Damage players in area

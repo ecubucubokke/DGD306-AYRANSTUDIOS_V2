@@ -12,6 +12,7 @@ public class Boss2 : MonoBehaviour
     [SerializeField] private Transform missileSpawnPoint;         // Where missile originates
     [SerializeField] private float attackCooldown = 4f;           // Time between attacks
     [SerializeField] private int missileDamage = 30;             // Damage that explosion deals
+    [SerializeField] private float missileWindup = 0.4f;         // Time between animation start and missile launch
 
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 400;
@@ -70,19 +71,30 @@ public class Boss2 : MonoBehaviour
     private void PerformMissileAttack()
     {
         animator.SetTrigger("Attack");
-        audioSource?.PlayOneShot(missileLaunchSfx);
 
         // Find target player (random among active players)
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         if (players.Length == 0) return;
         GameObject targetPlayer = players[Random.Range(0, players.Length)];
 
-        // Spawn missile
+        // Launch missile after wind-up delay so animation plays first
+        StartCoroutine(LaunchMissileAfterDelay(targetPlayer.transform));
+    }
+
+    private IEnumerator LaunchMissileAfterDelay(Transform target)
+    {
+        yield return new WaitForSeconds(missileWindup);
+
+        // Play SFX right before launch
+        audioSource?.PlayOneShot(missileLaunchSfx);
+
+        if (missilePrefab == null || missileSpawnPoint == null || target == null) yield break;
+
         GameObject missileObj = Instantiate(missilePrefab, missileSpawnPoint.position, Quaternion.identity);
         Boss2_Missile missile = missileObj.GetComponent<Boss2_Missile>();
         if (missile != null)
         {
-            missile.Initialize(targetPlayer.transform, missileDamage);
+            missile.Initialize(target, missileDamage);
         }
     }
 

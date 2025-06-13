@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 151309620929432863}
   - component: {fileID: 8078868083107552670}
   m_Layer: 12
-  m_Name: Enemy Stationary
+  m_Name: Enemy Stationary 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   collisionDamage: 10
   collisionCooldown: 1
   healthCollectablePrefab: {fileID: 6006678821558556613, guid: 3c842d32321499a478888867b8435cfd, type: 3}
-  healthDropChance: 1
+  healthDropChance: 0
   followPlayer: 0
   followRange: 5
   canShoot: 1

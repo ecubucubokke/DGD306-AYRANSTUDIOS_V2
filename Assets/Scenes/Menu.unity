@@ -1886,9 +1886,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverDelay: 3
   gameOverPanelPrefab: {fileID: 5214607963880915072, guid: 39da6af4ece9eeb47b66cee503061a2e, type: 3}
-  transitionCanvasPrefab: {fileID: 4158126867893795730, guid: 7ca9eb2c021145c40a77cdabfb70c56f, type: 3}
-  transitionAnimationTrigger: Start
-  transitionAnimationDuration: 3
 --- !u!4 &896723542
 Transform:
   m_ObjectHideFlags: 0
