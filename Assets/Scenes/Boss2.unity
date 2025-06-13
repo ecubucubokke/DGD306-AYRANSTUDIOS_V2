@@ -1330,7 +1330,7 @@ MonoBehaviour:
   attackCooldown: 4
   missileDamage: 1
   missileWindup: 0.6
-  maxHealth: 400
+  maxHealth: 10
   healthBar: {fileID: 1240401065}
   healthText: {fileID: 0}
   animator: {fileID: 0}

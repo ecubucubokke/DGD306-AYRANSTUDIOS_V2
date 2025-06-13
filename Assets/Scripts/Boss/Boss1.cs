@@ -18,6 +18,7 @@ public class Boss1 : MonoBehaviour
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Transform laserSpawnPoint;
     [SerializeField] private int laserDamage = 20;
+    [SerializeField] private float laserWindup = 0.4f;
 
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 500;
@@ -28,6 +29,10 @@ public class Boss1 : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField] private GameObject victoryTextPrefab;
     [SerializeField] private float victoryTextDuration = 3f;
+
+    [Header("Portal Settings")]
+    [SerializeField] private GameObject portalPrefab;
+    [SerializeField] private Transform portalSpawnPoint;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioClip laserSound;
@@ -118,6 +123,10 @@ public class Boss1 : MonoBehaviour
     {
         canAttack = false;
         animator.SetTrigger("Attack");
+
+        // Wind-up delay allows animation to play before firing
+        yield return new WaitForSeconds(laserWindup);
+
         audioSource.PlayOneShot(laserSound);
 
         // Spawn laser
@@ -185,6 +194,12 @@ public class Boss1 : MonoBehaviour
             GameObject victoryText = Instantiate(victoryTextPrefab, Vector3.zero, Quaternion.identity);
             victoryText.transform.SetParent(GameObject.Find("Canvas").transform, false);
             Destroy(victoryText, victoryTextDuration);
+        }
+
+        // Spawn portal
+        if (portalPrefab != null && portalSpawnPoint != null)
+        {
+            Instantiate(portalPrefab, portalSpawnPoint.position, Quaternion.identity);
         }
 
         // Disable colliders and other components
