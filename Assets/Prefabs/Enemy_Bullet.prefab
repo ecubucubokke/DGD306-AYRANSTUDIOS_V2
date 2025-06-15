@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7734615414195879256}
   - component: {fileID: 8777751911820447435}
   m_Layer: 7
-  m_Name: Bullet_V0 2
+  m_Name: Enemy_Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,7 +133,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -168,5 +168,5 @@ MonoBehaviour:
   bulletSpeed: 6.3
   bulletLifetime: 2
   damage: 1
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 133542748560367321, guid: 01f6e5b3e49b10248af843c10a73a1af, type: 3}
   hitEffectDuration: 0.5

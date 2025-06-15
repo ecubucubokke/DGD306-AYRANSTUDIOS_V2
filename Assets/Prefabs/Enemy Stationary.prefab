@@ -178,16 +178,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  health: 2
-  collisionDamage: 10
+  health: 5
+  collisionDamage: 1
   collisionCooldown: 1
   healthCollectablePrefab: {fileID: 6006678821558556613, guid: 3c842d32321499a478888867b8435cfd, type: 3}
   healthDropChance: 1
   followPlayer: 0
   followRange: 5
   canShoot: 1
-  shootRange: 200
-  fireRate: 4
+  shootRange: 7
+  fireRate: 2.55
   enemyBulletPrefab: {fileID: 1562547607110310153, guid: b7dd51d52a594f54296329a75eb62a19, type: 3}
   firePoint: {fileID: 1911551284041187799}
   animator: {fileID: 0}

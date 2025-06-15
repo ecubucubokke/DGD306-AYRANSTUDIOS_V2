@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 38
   m_Sprite: {fileID: -2185472608353246101, guid: a05ee452bf48b3640a040d6a5f186c11, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.27305093, g: 0.4819349, b: 0.9811321, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   health: 5
-  collisionDamage: 10
+  collisionDamage: 1
   collisionCooldown: 1
   healthCollectablePrefab: {fileID: 0}
   healthDropChance: 0.3
