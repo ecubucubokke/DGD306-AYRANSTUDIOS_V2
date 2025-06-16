@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1414832194948597460}
   - component: {fileID: 267539324583031593}
   - component: {fileID: 2731724006324813517}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss1
   m_TagString: Boss
   m_Icon: {fileID: 0}
@@ -171,15 +171,20 @@ MonoBehaviour:
   laserRotationSpeed: 0
   laserPrefab: {fileID: 8120875000648185127, guid: 96011ac6dfb114a4897cddd5930a72c5, type: 3}
   laserSpawnPoint: {fileID: 1480055959011815559}
-  maxHealth: 200
-  currentHealth: 200
+  laserDamage: 1
+  laserWindup: 0.4
+  maxHealth: 80
+  currentHealth: 80
   healthBar: {fileID: 0}
   healthText: {fileID: 0}
-  victoryTextPrefab: {fileID: 0}
-  victoryTextDuration: 3
+  victoryTextPrefab: {fileID: 1994621661397911407, guid: a72df7df1f938a04dada3d4019ef6ade, type: 3}
+  victoryTextDuration: 5
+  portalPrefab: {fileID: 3466618596570632908, guid: 1eeba36f17b67ab4b9dac73a6f4c2fd6, type: 3}
+  portalSpawnPoint: {fileID: 4099769847744057233, guid: 34e20717fed2ebf4a80e3e4306e363fb, type: 3}
   laserSound: {fileID: 0}
   deathSound: {fileID: 0}
   audioSource: {fileID: 0}
+  enemySpawner: {fileID: 0}
 --- !u!1 &2129996250463509934
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +194,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1480055959011815559}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Laser_SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

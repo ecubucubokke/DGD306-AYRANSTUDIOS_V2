@@ -2828,9 +2828,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 57555792}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87301,7 +87301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1780715634}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Zemin_Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}

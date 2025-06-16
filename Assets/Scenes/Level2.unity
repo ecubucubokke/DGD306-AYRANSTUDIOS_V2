@@ -758,9 +758,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 57555792}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17095,7 +17095,7 @@ GameObject:
   - component: {fileID: 1005910023}
   - component: {fileID: 1005910022}
   - component: {fileID: 1005910021}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

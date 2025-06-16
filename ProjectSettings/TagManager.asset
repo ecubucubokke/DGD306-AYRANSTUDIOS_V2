@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Bullet
   - Boss
+  - Boss2
+  - Ground
   layers:
   - Default
   - TransparentFX

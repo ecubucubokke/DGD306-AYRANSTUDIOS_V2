@@ -34,11 +34,6 @@ public class Boss1 : MonoBehaviour
     [SerializeField] private GameObject portalPrefab;
     [SerializeField] private Transform portalSpawnPoint;
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioClip laserSound;
-    [SerializeField] private AudioClip deathSound;
-    [SerializeField] private AudioSource audioSource;
-
     [Header("Spawner Reference")]
     [SerializeField] private EnemySpawner enemySpawner;
 
@@ -54,7 +49,6 @@ public class Boss1 : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
         UpdateHealthUI();
 
@@ -127,8 +121,6 @@ public class Boss1 : MonoBehaviour
         // Wind-up delay allows animation to play before firing
         yield return new WaitForSeconds(laserWindup);
 
-        audioSource.PlayOneShot(laserSound);
-
         // Spawn laser
         currentLaser = Instantiate(laserPrefab, laserSpawnPoint.position, Quaternion.identity);
         currentLaser.transform.parent = transform;
@@ -180,7 +172,6 @@ public class Boss1 : MonoBehaviour
     {
         isDead = true;
         animator.SetTrigger("Die");
-        audioSource.PlayOneShot(deathSound);
         
         // Notify enemy spawner to stop spawning
         if (enemySpawner != null)
